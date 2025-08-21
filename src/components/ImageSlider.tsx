@@ -1,29 +1,29 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type Props = {
   images: string[];
   alt: string;
-  aspect?: string; // tailwind aspect utility, default square
+  aspect?: string; // default: square
 };
 
 export default function ImageSlider({ images, alt, aspect = "aspect-square" }: Props) {
   const [idx, setIdx] = useState(0);
   const touchStartX = useRef<number | null>(null);
 
-  const hasImages = Array.isArray(images) && images.length > 0;
-  const safeImages = hasImages ? images : ["/placeholder.svg"];
+  const safeImages = images?.length ? images : ["/placeholder.svg"];
+  const len = safeImages.length;
 
-  function prev() {
-    setIdx((i) => (i - 1 + safeImages.length) % safeImages.length);
-  }
-  function next() {
-    setIdx((i) => (i + 1) % safeImages.length);
-  }
-  function go(i: number) {
-    setIdx(i);
-  }
+  const prev = useCallback(() => {
+    setIdx((i) => (i - 1 + len) % len);
+  }, [len]);
+
+  const next = useCallback(() => {
+    setIdx((i) => (i + 1) % len);
+  }, [len]);
+
+  const go = useCallback((i: number) => setIdx(i), []);
 
   // keyboard arrows
   useEffect(() => {
@@ -33,9 +33,9 @@ export default function ImageSlider({ images, alt, aspect = "aspect-square" }: P
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [prev, next]);
 
-  // touch swipe (mobile)
+  // touch swipe
   function onTouchStart(e: React.TouchEvent) {
     touchStartX.current = e.touches[0].clientX;
   }
@@ -44,7 +44,10 @@ export default function ImageSlider({ images, alt, aspect = "aspect-square" }: P
     if (start == null) return;
     const end = e.changedTouches[0].clientX;
     const dx = end - start;
-    if (Math.abs(dx) > 40) (dx > 0 ? prev() : next());
+    if (Math.abs(dx) > 40) {
+      if (dx > 0) prev();
+      else next();
+    }
     touchStartX.current = null;
   }
 
@@ -63,15 +66,13 @@ export default function ImageSlider({ images, alt, aspect = "aspect-square" }: P
           draggable={false}
         />
 
-        {/* left / right controls */}
-        {safeImages.length > 1 && (
+        {len > 1 && (
           <>
             <button
               aria-label="Sebelumnya"
               onClick={prev}
               className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 h-9 w-9 grid place-items-center hover:bg-white dark:hover:bg-slate-800"
             >
-              {/* left chevron */}
               <svg width="18" height="18" viewBox="0 0 24 24" className="text-slate-700 dark:text-slate-200">
                 <path fill="currentColor" d="M15.41 7.41L14 6l-6 6l6 6l1.41-1.41L10.83 12z"/>
               </svg>
@@ -81,7 +82,6 @@ export default function ImageSlider({ images, alt, aspect = "aspect-square" }: P
               onClick={next}
               className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 h-9 w-9 grid place-items-center hover:bg-white dark:hover:bg-slate-800"
             >
-              {/* right chevron */}
               <svg width="18" height="18" viewBox="0 0 24 24" className="text-slate-700 dark:text-slate-200">
                 <path fill="currentColor" d="M8.59 16.59L10 18l6-6l-6-6l-1.41 1.41L13.17 12z"/>
               </svg>
@@ -90,7 +90,7 @@ export default function ImageSlider({ images, alt, aspect = "aspect-square" }: P
         )}
 
         {/* dots (mobile) */}
-        {safeImages.length > 1 && (
+        {len > 1 && (
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 md:hidden">
             {safeImages.map((_, i) => (
               <button
@@ -107,7 +107,7 @@ export default function ImageSlider({ images, alt, aspect = "aspect-square" }: P
       </div>
 
       {/* thumbnails (desktop) */}
-      {safeImages.length > 1 && (
+      {len > 1 && (
         <div className="mt-3 hidden md:grid grid-cols-5 gap-2">
           {safeImages.map((src, i) => (
             <button

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
-  const isDark = typeof document !== "undefined" && document.documentElement.classList.contains("dark");
 
   useEffect(() => setMounted(true), []);
 
@@ -11,15 +10,16 @@ export default function ThemeToggle() {
     const root = document.documentElement;
     const nowDark = !root.classList.contains("dark");
     root.classList.toggle("dark", nowDark);
-    try { localStorage.setItem("theme", nowDark ? "dark" : "light"); } catch (e) {}
+    try { localStorage.setItem("theme", nowDark ? "dark" : "light"); } catch {}
   }
 
   if (!mounted) {
-    // Skeleton button to avoid hydration mismatch
     return (
       <button aria-label="Toggle theme" className="h-9 w-9 rounded-full border border-slate-200 dark:border-slate-700" />
     );
   }
+
+  const isDark = document.documentElement.classList.contains("dark");
 
   return (
     <button
@@ -29,14 +29,9 @@ export default function ThemeToggle() {
                  dark:border-slate-700 dark:bg-slate-800/70 dark:hover:bg-slate-800"
       title="Dark / Light"
     >
-      {/* Sun / Moon icon (pure CSS) */}
       <span className="relative block h-5 w-5">
-        <span
-          className={`absolute inset-0 rounded-full bg-amber-400 shadow ${isDark ? "scale-0 opacity-0" : "scale-100 opacity-100"} transition`}
-        />
-        <span
-          className={`absolute inset-0 rounded-full bg-slate-200 ${isDark ? "scale-100 opacity-100" : "scale-0 opacity-0"} transition`}
-        />
+        <span className={`absolute inset-0 rounded-full bg-amber-400 shadow ${isDark ? "scale-0 opacity-0" : "scale-100 opacity-100"} transition`} />
+        <span className={`absolute inset-0 rounded-full bg-slate-200 ${isDark ? "scale-100 opacity-100" : "scale-0 opacity-0"} transition`} />
       </span>
     </button>
   );
