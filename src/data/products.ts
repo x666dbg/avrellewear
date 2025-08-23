@@ -4,6 +4,7 @@ export interface Product {
   price: string;
   images: string[];
   category: string;
+  description: string;
   tags?: string[];
 }
 
@@ -13,6 +14,7 @@ export const products: Product[] = [
     name: "T-Shirt White",
     price: "Rp 119.000",
     category: "T-Shirts",
+    description: "Bahan nyaman untuk aktivitas harian. Potongan modern cocok untuk Gen Z.",
     images: [
       "https://raw.githubusercontent.com/x666dbg/x666dbg/refs/heads/master/avrelle/IMG_1357.PNG",
       "https://raw.githubusercontent.com/x666dbg/x666dbg/refs/heads/master/avrelle/IMG_1358.PNG"
@@ -23,6 +25,7 @@ export const products: Product[] = [
     name: "T-Shirt Black",
     price: "Rp 119.000",
     category: "T-Shirts",
+    description: "Bahan nyaman untuk aktivitas harian. Potongan modern cocok untuk Gen Z.",
     images: [
       "https://raw.githubusercontent.com/x666dbg/x666dbg/refs/heads/master/avrelle/IMG_1359.PNG",
       "https://raw.githubusercontent.com/x666dbg/x666dbg/refs/heads/master/avrelle/IMG_1360.PNG"

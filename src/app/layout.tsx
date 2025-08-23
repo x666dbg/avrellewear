@@ -61,10 +61,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <div>
               <div className="ui-footer-title">Koleksi</div>
               <ul className="ui-footer-text mt-3 space-y-2">
-                <li><a href="/?cat=T-Shirts">T-Shirts</a></li>
-                <li><a href="/?cat=Hoodies">Hoodies</a></li>
-                <li><a href="/?cat=Jackets">Jackets</a></li>
-                <li><a href="/?cat=Pants">Pants</a></li>
+                <li><Link href="/?cat=T-Shirts">T-Shirts</Link></li>
+                <li><Link href="/?cat=Hoodies">Hoodies</Link></li>
+                <li><Link href="/?cat=Jackets">Jackets</Link></li>
+                <li><Link href="/?cat=Pants">Pants</Link></li>
               </ul>
             </div>
 
@@ -72,9 +72,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <div>
               <div className="ui-footer-title">Bantuan</div>
               <ul className="ui-footer-text mt-3 space-y-2">
-                <li><a href="#">Panduan Ukuran</a></li>
-                <li><a href="#">Kebijakan Pengembalian</a></li>
-                <li><a href="#">FAQ</a></li>
+                <li><Link href="#">Panduan Ukuran</Link></li>
+                <li><Link href="#">Kebijakan Pengembalian</Link></li>
+                <li><Link href="#">FAQ</Link></li>
               </ul>
             </div>
 
@@ -103,9 +103,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <div className="mx-auto max-w-7xl px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-2">
               <span className="ui-footer-meta">© {new Date().getFullYear()} Avrellewear. All rights reserved.</span>
               <div className="ui-footer-meta flex items-center gap-4">
-                <a href="#" className="hover:underline">Terms</a>
-                <a href="#" className="hover:underline">Privacy</a>
-                <a href="#" className="hover:underline">Cookies</a>
+                <Link href="#" className="hover:underline">Terms</Link>
+                <Link href="#" className="hover:underline">Privacy</Link>
+                <Link href="#" className="hover:underline">Cookies</Link>
               </div>
             </div>
           </div>
