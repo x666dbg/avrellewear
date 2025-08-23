@@ -7,8 +7,10 @@ export default function CategoryPills({ categories, active }: Props) {
     <div className="flex flex-wrap gap-2">
       <Link
         href="/"
-        className={`text-sm px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700
-          ${!active ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900" : "hover:bg-slate-100 dark:hover:bg-slate-800"}`}
+        className={`text-sm px-3 py-1.5 rounded-full border
+          ${!active
+            ? "border-neutral-900 bg-neutral-900 text-white dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900"
+            : "border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800"}`}
       >
         Semua
       </Link>
@@ -16,8 +18,10 @@ export default function CategoryPills({ categories, active }: Props) {
         <Link
           key={c}
           href={`/?cat=${encodeURIComponent(c)}`}
-          className={`text-sm px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700
-            ${active === c ? "bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900" : "hover:bg-slate-100 dark:hover:bg-slate-800"}`}
+          className={`text-sm px-3 py-1.5 rounded-full border
+            ${active === c
+              ? "border-neutral-900 bg-neutral-900 text-white dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900"
+              : "border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800"}`}
         >
           {c}
         </Link>

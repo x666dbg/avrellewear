@@ -32,13 +32,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Script>
       </head>
       <body className={inter.className + " min-h-screen"}>
-        <header className="sticky top-0 z-50 backdrop-blur bg-white/70 dark:bg-slate-900/70 border-b border-slate-200/70 dark:border-slate-800">
+        {/* <header className="sticky top-0 z-50 backdrop-blur bg-white/70 dark:bg-slate-900/70 border-b border-slate-200/70 dark:border-slate-800"> */}
+        <header className="sticky top-0 z-50 ui-surface">
           <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
-            <Link href="/" className="font-bold text-lg tracking-tight hover:opacity-80 transition">
+            <Link href="/" className="ui-brand">
               👕 Avrellewear
             </Link>
-            <nav className="hidden md:flex items-center gap-6 text-sm">
-              <Link href="/" className="hover:opacity-70">Beranda</Link>
+            <nav className="hidden md:flex items-center gap-6">
+              <Link href="/" className="ui-navlink">Beranda</Link>
             </nav>
             <div className="flex items-center gap-2">
               <ThemeToggle />

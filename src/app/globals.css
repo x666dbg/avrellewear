@@ -3,28 +3,46 @@
 /* Full-page background & color */
 html, body { height: 100%; }
 
-html { /* default: light */
-  @apply bg-slate-50 text-slate-900;
-}
-html.dark {
-  @apply bg-slate-900 text-slate-100;
-}
+/* ✅ Light mode: netral bersih */
+html { @apply bg-neutral-50 text-neutral-900; }
+/* ✅ Dark mode: tetap */
+html.dark { @apply bg-neutral-900 text-neutral-100; }
 
-body { @apply min-h-screen bg-gradient-to-b from-slate-50 to-white; }
-html.dark body { @apply bg-gradient-to-b from-slate-900 to-slate-950; }
+/* ✅ Body gradient lebih subtle */
+body { @apply min-h-screen bg-gradient-to-b from-white to-neutral-50; }
+html.dark body { @apply bg-gradient-to-b from-neutral-900 to-neutral-950; }
 
-/* Cards */
+/* ✅ Card kontras pas di light & dark */
 .card {
-  @apply rounded-xl border border-slate-200/70 bg-white/80 backdrop-blur;
-  box-shadow: 0 10px 30px rgba(2,6,23,0.06);
+  @apply rounded-xl border border-neutral-200 bg-white/90 backdrop-blur;
+  box-shadow: 0 8px 30px rgba(2,6,23,0.06);
 }
 html.dark .card {
-  @apply border-slate-700/50 bg-slate-800/60;
+  @apply border-neutral-700/50 bg-neutral-800/70;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
+
+/* Hover elev */
 .card-hover { @apply transition-transform hover:-translate-y-0.5 hover:shadow-xl; }
 
 /* Scrollbar (optional) */
 *::-webkit-scrollbar { width: 10px; height: 10px; }
 *::-webkit-scrollbar-thumb { background: rgba(100,116,139,.35); border-radius: 999px; }
 *::-webkit-scrollbar-track { background: transparent; }
+
+.ui-surface {
+  @apply backdrop-blur
+         bg-white dark:bg-neutral-900   /* solid, bukan transparan */
+         border-b border-neutral-200 dark:border-neutral-800
+         shadow-sm;
+}
+
+.ui-brand {
+  @apply font-bold text-lg tracking-tight transition;
+  @apply text-black dark:text-white;   /* hitam pekat di light, putih pekat di dark */
+}
+
+.ui-navlink {
+  @apply text-sm text-neutral-700 hover:text-black
+         dark:text-neutral-300 dark:hover:text-white transition;
+}

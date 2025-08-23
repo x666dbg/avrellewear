@@ -10,7 +10,8 @@ type Props = {
 export default function ProductCard({ image, title, meta, price }: Props) {
   return (
     <article className="card card-hover overflow-hidden">
-      <div className="relative aspect-[3/4] bg-slate-100 dark:bg-slate-700/40">
+      {/* <div className="relative aspect-[3/4] bg-slate-100 dark:bg-slate-700/40"> */}
+      <div className="relative aspect-[3/4] bg-neutral-100 dark:bg-neutral-700/40">
         {image && (
           <Image
             src={image}

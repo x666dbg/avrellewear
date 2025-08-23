@@ -26,8 +26,17 @@ export default function Search({ placeholder = "Cari produk..." }: { placeholder
   return (
     <div className="relative">
       <input
-        className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800/70
-                   px-4 py-2.5 pr-10 outline-none focus:ring-2 ring-slate-900/10 dark:ring-white/10"
+        className="
+          w-full rounded-xl
+          border border-neutral-300 dark:border-neutral-700
+          bg-white dark:bg-neutral-800
+          text-neutral-900 dark:text-white
+          placeholder-neutral-500 dark:placeholder-white/70
+          px-4 py-2.5 pr-10 outline-none
+          shadow-sm focus:shadow-md
+          focus:ring-2 ring-neutral-900/10 dark:ring-white/20
+          transition-colors
+        "
         placeholder={placeholder}
         value={val}
         onChange={(e) => setVal(e.target.value)}

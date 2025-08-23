@@ -37,7 +37,8 @@ export default async function Home({ searchParams }: PageProps) {
             </div>
           </div>
           <div className="hidden md:block">
-            <div className="aspect-[5/3] w-full rounded-xl bg-gradient-to-br from-slate-200 to-white dark:from-slate-800 dark:to-slate-900" />
+            {/* <div className="aspect-[5/3] w-full rounded-xl bg-gradient-to-br from-slate-200 to-white dark:from-slate-800 dark:to-slate-900" /> */}
+            <div className="aspect-[5/3] w-full rounded-xl bg-gradient-to-br from-neutral-100 via-white to-neutral-100 dark:from-neutral-800 dark:via-neutral-900 dark:to-neutral-800" />
           </div>
         </div>
       </section>
