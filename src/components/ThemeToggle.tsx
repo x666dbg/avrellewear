@@ -5,15 +5,33 @@ export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
+  function setMetaColorScheme(mode: "light" | "dark") {
+    const m = document.querySelector('meta[name="color-scheme"]');
+    if (m) m.setAttribute("content", mode);
+  }
+
   function toggle() {
     const root = document.documentElement;
     const nowDark = !root.classList.contains("dark");
+
     root.classList.toggle("dark", nowDark);
-    try { localStorage.setItem("theme", nowDark ? "dark" : "light"); } catch {}
+
+    // Persist keduanya: cookie (untuk SSR) + localStorage (fallback)
+    try {
+      localStorage.setItem("theme", nowDark ? "dark" : "light");
+      document.cookie = `theme=${nowDark ? "dark" : "light"}; Path=/; Max-Age=31536000; SameSite=Lax`;
+      setMetaColorScheme(nowDark ? "dark" : "light");
+    } catch {}
   }
 
+  // Hindari mismatch icon sebelum mount
   if (!mounted) {
-    return <button aria-label="Toggle theme" className="h-9 w-9 rounded-full border border-slate-200 dark:border-slate-700" />;
+    return (
+      <button
+        aria-label="Toggle theme"
+        className="h-9 w-9 rounded-full border border-neutral-200 dark:border-neutral-700"
+      />
+    );
   }
 
   const isDark = document.documentElement.classList.contains("dark");
@@ -22,14 +40,13 @@ export default function ThemeToggle() {
     <button
       onClick={toggle}
       aria-label="Toggle theme"
-      className="h-9 w-9 grid place-items-center rounded-full border border-slate-200 bg-white/70 backdrop-blur hover:bg-white transition
-                 dark:border-slate-700 dark:bg-slate-800/70 dark:hover:bg-slate-800"
+      className="h-9 w-9 grid place-items-center rounded-full border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition"
       title="Dark / Light"
     >
-      {/* Simple sun/moon indicator */}
+      {/* indikator sederhana */}
       <span className="relative block h-5 w-5">
-        <span className={`absolute inset-0 rounded-full bg-amber-400 shadow ${isDark ? "scale-0 opacity-0" : "scale-100 opacity-100"} transition`} />
-        <span className={`absolute inset-0 rounded-full bg-slate-200 ${isDark ? "scale-100 opacity-100" : "scale-0 opacity-0"} transition`} />
+        <span className={`absolute inset-0 rounded-full ${isDark ? "opacity-0 scale-0" : "opacity-100 scale-100"} bg-amber-400 transition`} />
+        <span className={`absolute inset-0 rounded-full ${isDark ? "opacity-100 scale-100" : "opacity-0 scale-0"} bg-neutral-200 transition`} />
       </span>
     </button>
   );

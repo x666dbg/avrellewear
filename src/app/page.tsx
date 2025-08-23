@@ -21,7 +21,7 @@ export default async function Home({ searchParams }: PageProps) {
   return (
     <div className="space-y-8">
       {/* Hero */}
-      <section className="card p-6 md:p-8 mt-8 md:mt-12">
+      <section className="card p-6 md:p-8 mt-8 md:mt-4">
         <div className="grid md:grid-cols-2 gap-6 items-center">
           <div>
             <h1 className="text-3xl md:text-5xl font-bold tracking-tight">Daily fits for Gen Z.</h1>

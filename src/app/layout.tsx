@@ -1,8 +1,8 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
-import Script from "next/script";
 import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
+import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,24 +11,14 @@ export const metadata = {
   description: "Avrellewear — Catalog",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = await cookies();
+  const theme = cookieStore.get("theme")?.value === "dark" ? "dark" : "light";
+
   return (
-    <html lang="id" suppressHydrationWarning>
+    <html lang="id" className={theme === "dark" ? "dark" : ""} suppressHydrationWarning>
       <head>
-        <meta name="color-scheme" content="light dark" />
-        <Script id="theme-init" strategy="beforeInteractive">
-          {`
-            (function () {
-              try {
-                var ls = localStorage.getItem('theme');
-                var theme = ls ? ls : 'light';
-                var root = document.documentElement;
-                if (theme === 'dark') root.classList.add('dark');
-                else root.classList.remove('dark');
-              } catch {}
-            })();
-          `}
-        </Script>
+        <meta name="color-scheme" content={theme === "dark" ? "dark" : "light"} />
       </head>
       <body className={inter.className + " min-h-screen"}>
         <header className="fixed top-0 inset-x-0 z-50 ui-surface">
@@ -43,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
 
-        <main className="mx-auto max-w-7xl px-4 py-8">{children}</main>
+        <main className="mx-auto max-w-7xl px-4 py-8 pt-20">{children}</main>
 
         <footer className="ui-footer ui-footer-inverse">
           <div className="ui-footer-grid">
