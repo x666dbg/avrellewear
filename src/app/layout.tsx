@@ -16,7 +16,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="id" suppressHydrationWarning>
       <head>
         <meta name="color-scheme" content="light dark" />
-        {/* Set theme very early, avoid flicker */}
         <Script id="theme-init" strategy="beforeInteractive">
           {`
             (function () {
@@ -32,12 +31,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Script>
       </head>
       <body className={inter.className + " min-h-screen"}>
-        {/* <header className="sticky top-0 z-50 backdrop-blur bg-white/70 dark:bg-slate-900/70 border-b border-slate-200/70 dark:border-slate-800"> */}
         <header className="sticky top-0 z-50 ui-surface">
-          <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
-            <Link href="/" className="ui-brand">
-              👕 Avrellewear
-            </Link>
+          {/* ⬇️ Set warna di container header, anak-anak inherit */}
+          <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between text-black dark:text-white">
+            <Link href="/" className="ui-brand">Avrellewear</Link>
             <nav className="hidden md:flex items-center gap-6">
               <Link href="/" className="ui-navlink">Beranda</Link>
             </nav>
@@ -49,8 +46,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <main className="mx-auto max-w-7xl px-4 py-8">{children}</main>
 
-        <footer className="border-t border-slate-200/70 dark:border-slate-800 mt-12">
-          <div className="mx-auto max-w-7xl px-4 py-8 text-sm text-slate-600 dark:text-slate-400 flex items-center justify-between">
+        <footer className="border-t border-neutral-200 dark:border-neutral-800 mt-12">
+          <div className="mx-auto max-w-7xl px-4 py-8 text-sm text-neutral-600 dark:text-neutral-400 flex items-center justify-between">
             <span>© {new Date().getFullYear()} Avrellewear</span>
             <span className="hidden md:block">Built with Next.js & Tailwind</span>
           </div>

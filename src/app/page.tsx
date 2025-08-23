@@ -5,7 +5,6 @@ import Search from "@/components/Search";
 import { products } from "@/data/products";
 
 export const revalidate = false;
-
 type PageProps = { searchParams: Promise<{ cat?: string; q?: string }> };
 
 export default async function Home({ searchParams }: PageProps) {
@@ -26,7 +25,8 @@ export default async function Home({ searchParams }: PageProps) {
         <div className="grid md:grid-cols-2 gap-6 items-center">
           <div>
             <h1 className="text-3xl md:text-5xl font-bold tracking-tight">Daily fits for Gen Z.</h1>
-            <p className="mt-2 text-slate-600 dark:text-slate-300">
+            {/* Ikuti default (light=hitam, dark=putih) */}
+            <p className="mt-2">
               Minimal, clean, dan responsif. Temukan outfit favoritmu dari koleksi Avrellewear.
             </p>
             <div className="mt-4">
@@ -37,7 +37,6 @@ export default async function Home({ searchParams }: PageProps) {
             </div>
           </div>
           <div className="hidden md:block">
-            {/* <div className="aspect-[5/3] w-full rounded-xl bg-gradient-to-br from-slate-200 to-white dark:from-slate-800 dark:to-slate-900" /> */}
             <div className="aspect-[5/3] w-full rounded-xl bg-gradient-to-br from-neutral-100 via-white to-neutral-100 dark:from-neutral-800 dark:via-neutral-900 dark:to-neutral-800" />
           </div>
         </div>
@@ -47,11 +46,11 @@ export default async function Home({ searchParams }: PageProps) {
       <section>
         <div className="flex items-baseline justify-between mb-3">
           <h2 className="text-lg font-semibold">Produk</h2>
-          <span className="text-sm text-slate-500 dark:text-slate-400">{filtered.length} item</span>
+          <span className="text-sm text-neutral-500 dark:text-neutral-400">{filtered.length} item</span>
         </div>
 
         {filtered.length === 0 ? (
-          <div className="card p-8 text-center text-slate-500 dark:text-slate-400">
+          <div className="card p-8 text-center text-neutral-500 dark:text-neutral-400">
             Produk tidak ditemukan. Coba kata kunci/kategori lain.
           </div>
         ) : (

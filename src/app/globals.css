@@ -1,48 +1,89 @@
 @import "tailwindcss";
 
-/* Full-page background & color */
+/* Full height */
 html, body { height: 100%; }
 
-/* ✅ Light mode: netral bersih */
-html { @apply bg-neutral-50 text-neutral-900; }
-/* ✅ Dark mode: tetap */
-html.dark { @apply bg-neutral-900 text-neutral-100; }
+/* Background only */
+html { @apply bg-white; }
+html.dark { @apply bg-neutral-900; }
 
-/* ✅ Body gradient lebih subtle */
-body { @apply min-h-screen bg-gradient-to-b from-white to-neutral-50; }
-html.dark body { @apply bg-gradient-to-b from-neutral-900 to-neutral-950; }
+/* ✅ Default text color site-wide */
+body { @apply min-h-screen text-black bg-gradient-to-b from-white to-neutral-50; }
+html.dark body { @apply text-white bg-gradient-to-b from-neutral-900 to-neutral-950; }
 
-/* ✅ Card kontras pas di light & dark */
+/* Links inherit text color */
+a { color: inherit; }
+
+/* Cards */
 .card {
-  @apply rounded-xl border border-neutral-200 bg-white/90 backdrop-blur;
+  @apply rounded-xl border border-neutral-200 bg-white backdrop-blur;
   box-shadow: 0 8px 30px rgba(2,6,23,0.06);
 }
 html.dark .card {
-  @apply border-neutral-700/50 bg-neutral-800/70;
+  @apply border-neutral-700 bg-neutral-800;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
 
-/* Hover elev */
+/* Hover elevation */
 .card-hover { @apply transition-transform hover:-translate-y-0.5 hover:shadow-xl; }
 
-/* Scrollbar (optional) */
+/* Scrollbar */
 *::-webkit-scrollbar { width: 10px; height: 10px; }
 *::-webkit-scrollbar-thumb { background: rgba(100,116,139,.35); border-radius: 999px; }
 *::-webkit-scrollbar-track { background: transparent; }
 
+/* Header surface (solid) */
 .ui-surface {
-  @apply backdrop-blur
-         bg-white dark:bg-neutral-900   /* solid, bukan transparan */
-         border-b border-neutral-200 dark:border-neutral-800
-         shadow-sm;
+  @apply backdrop-blur bg-white dark:bg-neutral-900
+         border-b border-neutral-200 dark:border-neutral-800 shadow-sm;
 }
 
-.ui-brand {
-  @apply font-bold text-lg tracking-tight transition;
-  @apply text-black dark:text-white;   /* hitam pekat di light, putih pekat di dark */
+/* Brand & nav link: biar ikut warna container (inherit) */
+.ui-brand { @apply font-bold text-lg tracking-tight transition; }
+.ui-navlink { @apply text-sm transition hover:opacity-80; }
+
+/* === Reusable UI === */
+
+/* Input seperti search */
+.ui-input {
+  @apply w-full rounded-xl border border-neutral-300 dark:border-neutral-700
+         bg-white text-black placeholder-neutral-500
+         dark:bg-neutral-800 dark:text-white dark:placeholder-white/70
+         px-4 py-2.5 outline-none shadow-sm focus:shadow-md
+         focus:ring-2 ring-neutral-900/10 dark:ring-white/20;
 }
 
-.ui-navlink {
-  @apply text-sm text-neutral-700 hover:text-black
-         dark:text-neutral-300 dark:hover:text-white transition;
+/* Category pills — KONTRAS & TIDAK BISA KALAH */
+a.ui-pill {
+  @apply text-sm px-3 py-1.5 rounded-full border transition
+         border-gray-300 dark:border-gray-600
+         bg-white dark:bg-transparent
+         hover:bg-gray-200 dark:hover:bg-white/10;
+  color: #000 !important;                 /* LIGHT: teks hitam */
+}
+html.dark a.ui-pill {
+  color: #fff !important;                 /* DARK: teks putih */
+}
+
+/* Handle visited (Safari/Chrome kadang override) */
+a.ui-pill:visited {
+  color: #000 !important;                 /* LIGHT visited tetap hitam */
+}
+html.dark a.ui-pill:visited {
+  color: #fff !important;                 /* DARK visited tetap putih */
+}
+
+/* Aktif */
+a.ui-pill.ui-pill-active {
+  @apply border-black bg-black;           /* LIGHT: bg hitam solid */
+  color: #fff !important;                 /* LIGHT: teks putih */
+}
+html.dark a.ui-pill.ui-pill-active {
+  @apply border-white/40 bg-white/20;     /* DARK: overlay putih */
+  color: #fff !important;                 /* DARK: teks tetap putih */
+}
+
+/* Fokus keyboard terlihat */
+a.ui-pill:focus-visible {
+  @apply outline-none ring-2 ring-black/20 dark:ring-white/30;
 }
