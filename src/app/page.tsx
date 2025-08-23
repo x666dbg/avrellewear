@@ -27,7 +27,7 @@ export default async function Home({ searchParams }: PageProps) {
             <h1 className="text-3xl md:text-5xl font-bold tracking-tight">Daily fits for Gen Z.</h1>
             {/* Ikuti default (light=hitam, dark=putih) */}
             <p className="mt-2">
-              Minimal, clean, dan responsif. Temukan outfit favoritmu dari koleksi Avrellewear.
+              Minimal, clean, dan siap dipakai sehari-hari. Temukan outfit favoritmu dari koleksi Avrellewear.
             </p>
             <div className="mt-4">
               <Search placeholder="Cari: hoodie, tee, denim..." />

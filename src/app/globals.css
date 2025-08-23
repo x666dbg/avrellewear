@@ -87,3 +87,43 @@ html.dark a.ui-pill.ui-pill-active {
 a.ui-pill:focus-visible {
   @apply outline-none ring-2 ring-black/20 dark:ring-white/30;
 }
+
+/* === Footer branding === */
+.ui-footer {
+  @apply bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800;
+}
+.ui-footer-grid {
+  @apply mx-auto max-w-7xl px-4 py-10 grid gap-8
+         sm:grid-cols-2 lg:grid-cols-4;
+}
+.ui-footer-title {
+  @apply text-base font-semibold;
+}
+.ui-footer-text {
+  @apply text-sm text-neutral-600 dark:text-neutral-400;
+}
+.ui-footer-meta {
+  @apply text-xs text-neutral-500 dark:text-neutral-500;
+}
+.ui-social {
+  @apply flex items-center gap-3 mt-4;
+}
+.ui-social a {
+  @apply h-9 w-9 grid place-items-center rounded-full border
+         border-neutral-200 dark:border-neutral-700
+         hover:bg-neutral-100 dark:hover:bg-neutral-800 transition;
+  color: inherit; /* ikut warna teks */
+}
+
+.ui-footer-inverse {
+  @apply bg-neutral-900 text-white;           /* light & dark sama-sama dark */
+}
+.ui-footer-inverse .ui-footer-title { @apply text-white; }
+.ui-footer-inverse .ui-footer-text  { @apply text-neutral-300; }
+.ui-footer-inverse .ui-footer-meta  { @apply text-neutral-400; }
+
+/* ikon sosmed pakai currentColor → jadikan putih + border putih tipis */
+.ui-footer-inverse .ui-social a {
+  color: #fff;                                 /* ikon jadi putih */
+  @apply border-white/20 hover:bg-white/10;
+}
