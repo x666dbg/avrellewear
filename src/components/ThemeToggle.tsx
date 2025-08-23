@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
-
   useEffect(() => setMounted(true), []);
 
   function toggle() {
@@ -14,9 +13,7 @@ export default function ThemeToggle() {
   }
 
   if (!mounted) {
-    return (
-      <button aria-label="Toggle theme" className="h-9 w-9 rounded-full border border-slate-200 dark:border-slate-700" />
-    );
+    return <button aria-label="Toggle theme" className="h-9 w-9 rounded-full border border-slate-200 dark:border-slate-700" />;
   }
 
   const isDark = document.documentElement.classList.contains("dark");
@@ -29,6 +26,7 @@ export default function ThemeToggle() {
                  dark:border-slate-700 dark:bg-slate-800/70 dark:hover:bg-slate-800"
       title="Dark / Light"
     >
+      {/* Simple sun/moon indicator */}
       <span className="relative block h-5 w-5">
         <span className={`absolute inset-0 rounded-full bg-amber-400 shadow ${isDark ? "scale-0 opacity-0" : "scale-100 opacity-100"} transition`} />
         <span className={`absolute inset-0 rounded-full bg-slate-200 ${isDark ? "scale-100 opacity-100" : "scale-0 opacity-0"} transition`} />

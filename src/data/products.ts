@@ -3,13 +3,16 @@ export interface Product {
   name: string;
   price: string;
   images: string[];
+  category: string;
+  tags?: string[];
 }
 
 export const products: Product[] = [
   {
     id: 1,
     name: "T-Shirt White",
-    price: "Rp 120.000",
+    price: "Rp 119.000",
+    category: "T-Shirts",
     images: [
       "https://raw.githubusercontent.com/x666dbg/x666dbg/refs/heads/master/avrelle/IMG_1357.PNG",
       "https://raw.githubusercontent.com/x666dbg/x666dbg/refs/heads/master/avrelle/IMG_1358.PNG"
@@ -18,11 +21,11 @@ export const products: Product[] = [
   {
     id: 2,
     name: "T-Shirt Black",
-    price: "Rp 120.000",
+    price: "Rp 119.000",
+    category: "T-Shirts",
     images: [
       "https://raw.githubusercontent.com/x666dbg/x666dbg/refs/heads/master/avrelle/IMG_1359.PNG",
-      "https://raw.githubusercontent.com/x666dbg/x666dbg/refs/heads/master/avrelle/IMG_1340.PNG"
+      "https://raw.githubusercontent.com/x666dbg/x666dbg/refs/heads/master/avrelle/IMG_1360.PNG"
     ],
-  },
-  // ...dst
+  }
 ];

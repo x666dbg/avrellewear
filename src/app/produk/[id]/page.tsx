@@ -3,7 +3,6 @@ import Link from "next/link";
 import { products } from "@/data/products";
 import ImageSlider from "@/components/ImageSlider";
 
-// Next.js 15: params async
 type PageProps = { params: Promise<{ id: string }> };
 
 export function generateStaticParams() {
@@ -37,14 +36,14 @@ export default async function ProductDetail({ params }: PageProps) {
       <div className="lg:sticky lg:top-20 h-fit">
         <div className="card p-6 space-y-4">
           <div>
-            <div className="text-sm text-slate-500 dark:text-slate-400">Avrellewear</div>
+            <div className="text-sm text-slate-500 dark:text-slate-400">{p.category}</div>
             <h1 className="text-2xl font-bold tracking-tight">{p.name}</h1>
           </div>
 
           <div className="text-2xl font-semibold">{p.price}</div>
 
           <div className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
-            <p>Bahan premium, nyaman dipakai harian.</p>
+            <p>Bahan nyaman untuk aktivitas harian. Potongan modern cocok untuk Gen Z.</p>
             <p>Foto dummy dari Unsplash (acak per keyword).</p>
           </div>
 

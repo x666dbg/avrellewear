@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Avrellewear",
-  description: "Avrellewear | Catalog",
+  description: "Avrellewear — Catalog",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -16,6 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="id" suppressHydrationWarning>
       <head>
         <meta name="color-scheme" content="light dark" />
+        {/* Set theme very early, avoid flicker */}
         <Script id="theme-init" strategy="beforeInteractive">
           {`
             (function () {
@@ -34,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <header className="sticky top-0 z-50 backdrop-blur bg-white/70 dark:bg-slate-900/70 border-b border-slate-200/70 dark:border-slate-800">
           <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
             <Link href="/" className="font-bold text-lg tracking-tight hover:opacity-80 transition">
-              Avrellewear
+              👕 Avrellewear
             </Link>
             <nav className="hidden md:flex items-center gap-6 text-sm">
               <Link href="/" className="hover:opacity-70">Beranda</Link>

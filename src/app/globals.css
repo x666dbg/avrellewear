@@ -1,25 +1,19 @@
 @import "tailwindcss";
 
-/* Tinggi penuh + background di html & body */
+/* Full-page background & color */
 html, body { height: 100%; }
 
-/* Default: light; saat .dark di <html>, overwrite */
-html {
+html { /* default: light */
   @apply bg-slate-50 text-slate-900;
 }
 html.dark {
   @apply bg-slate-900 text-slate-100;
 }
 
-/* Body punya gradasi halus (ikut dark juga) */
-body {
-  @apply min-h-screen bg-gradient-to-b from-slate-50 to-white;
-}
-html.dark body {
-  @apply bg-gradient-to-b from-slate-900 to-slate-950;
-}
+body { @apply min-h-screen bg-gradient-to-b from-slate-50 to-white; }
+html.dark body { @apply bg-gradient-to-b from-slate-900 to-slate-950; }
 
-/* Komponen kartu */
+/* Cards */
 .card {
   @apply rounded-xl border border-slate-200/70 bg-white/80 backdrop-blur;
   box-shadow: 0 10px 30px rgba(2,6,23,0.06);
@@ -28,10 +22,9 @@ html.dark .card {
   @apply border-slate-700/50 bg-slate-800/60;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
-
 .card-hover { @apply transition-transform hover:-translate-y-0.5 hover:shadow-xl; }
 
-/* Scrollbar */
+/* Scrollbar (optional) */
 *::-webkit-scrollbar { width: 10px; height: 10px; }
 *::-webkit-scrollbar-thumb { background: rgba(100,116,139,.35); border-radius: 999px; }
 *::-webkit-scrollbar-track { background: transparent; }

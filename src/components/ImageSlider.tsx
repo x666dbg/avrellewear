@@ -1,28 +1,23 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type Props = {
   images: string[];
   alt: string;
-  aspect?: string; // default: square
+  aspect?: string; // tailwind aspect (default square)
 };
 
 export default function ImageSlider({ images, alt, aspect = "aspect-square" }: Props) {
   const [idx, setIdx] = useState(0);
   const touchStartX = useRef<number | null>(null);
 
-  const safeImages = images?.length ? images : ["/placeholder.svg"];
+  const safeImages = images?.length ? images : ["https://source.unsplash.com/900x1200/?fashion"];
   const len = safeImages.length;
 
-  const prev = useCallback(() => {
-    setIdx((i) => (i - 1 + len) % len);
-  }, [len]);
-
-  const next = useCallback(() => {
-    setIdx((i) => (i + 1) % len);
-  }, [len]);
-
+  const prev = useCallback(() => setIdx(i => (i - 1 + len) % len), [len]);
+  const next = useCallback(() => setIdx(i => (i + 1) % len), [len]);
   const go = useCallback((i: number) => setIdx(i), []);
 
   // keyboard arrows
@@ -44,10 +39,7 @@ export default function ImageSlider({ images, alt, aspect = "aspect-square" }: P
     if (start == null) return;
     const end = e.changedTouches[0].clientX;
     const dx = end - start;
-    if (Math.abs(dx) > 40) {
-      if (dx > 0) prev();
-      else next();
-    }
+    if (Math.abs(dx) > 40) (dx > 0 ? prev() : next());
     touchStartX.current = null;
   }
 
@@ -59,11 +51,13 @@ export default function ImageSlider({ images, alt, aspect = "aspect-square" }: P
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        <img
+        <Image
           src={safeImages[idx]}
           alt={`${alt} - ${idx + 1}`}
-          className="absolute inset-0 h-full w-full object-cover"
-          draggable={false}
+          fill
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          className="object-cover"
+          priority={false}
         />
 
         {len > 1 && (
@@ -119,8 +113,8 @@ export default function ImageSlider({ images, alt, aspect = "aspect-square" }: P
                   : "border-slate-200 dark:border-slate-700 opacity-80 hover:opacity-100"
               }`}
             >
-              <div className="aspect-square">
-                <img src={src} alt={`${alt} thumb ${i + 1}`} className="h-full w-full object-cover" />
+              <div className="relative aspect-square">
+                <Image src={src} alt={`${alt} thumb ${i + 1}`} fill sizes="10vw" className="object-cover" />
               </div>
             </button>
           ))}

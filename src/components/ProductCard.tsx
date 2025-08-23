@@ -1,12 +1,25 @@
-type Props = { image?: string; title: string; meta?: string; price: string };
+import Image from "next/image";
+
+type Props = {
+  image?: string;
+  title: string;
+  meta?: string;
+  price: string;
+};
 
 export default function ProductCard({ image, title, meta, price }: Props) {
   return (
     <article className="card card-hover overflow-hidden">
-      <div className="relative">
-        <div className="aspect-[4/5] w-full bg-slate-100 dark:bg-slate-700/40" />
+      <div className="relative aspect-[3/4] bg-slate-100 dark:bg-slate-700/40">
         {image && (
-          <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+          <Image
+            src={image}
+            alt={title}
+            fill
+            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+            className="object-cover transition-transform hover:scale-105"
+            priority={false}
+          />
         )}
       </div>
       <div className="p-3">
