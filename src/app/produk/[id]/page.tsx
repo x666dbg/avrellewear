@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { products } from "@/data/products";
 import ImageSlider from "@/components/ImageSlider";
+import { formatIDR } from "@/lib/currency";
 
 type PageProps = { params: Promise<{ id:string }> };
 
@@ -40,7 +41,7 @@ export default async function ProductDetail({ params }: PageProps) {
             <h1 className="text-2xl font-bold tracking-tight">{p.name}</h1>
           </div>
 
-          <div className="text-2xl font-semibold">{p.price}</div>
+          <div className="text-2xl font-semibold">{formatIDR(p.price)}</div>
 
           <div className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
             <p>{p.description}</p>
@@ -53,9 +54,12 @@ export default async function ProductDetail({ params }: PageProps) {
             >
               ← Kembali
             </Link>
-            <button className="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 transition dark:border-slate-700 dark:hover:bg-slate-800">
-              Tambah ke Wishlist
-            </button>
+            <Link
+              href={`/checkout?productId=${p.id}`} // Arahkan ke halaman checkout
+              className="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 transition dark:border-slate-700 dark:hover:bg-slate-800"
+            >
+              Beli Sekarang
+            </Link>
           </div>
         </div>
       </div>

@@ -24,9 +24,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <header className="fixed top-0 inset-x-0 z-50 ui-surface">
           <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between text-black dark:text-white">
             <Link href="/" className="ui-brand">Avrellewear</Link>
-            <nav className="hidden md:flex items-center gap-6">
-              <Link href="/" className="ui-navlink">Beranda</Link>
-            </nav>
             <div className="flex items-center gap-2">
               <ThemeToggle />
             </div>

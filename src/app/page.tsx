@@ -3,6 +3,7 @@ import ProductCard from "@/components/ProductCard";
 import CategoryPills from "@/components/CategoryPills";
 import Search from "@/components/Search";
 import { products } from "@/data/products";
+import { formatIDR } from "@/lib/currency";
 
 export const revalidate = false;
 type PageProps = { searchParams: Promise<{ cat?: string; q?: string }> };
