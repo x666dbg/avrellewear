@@ -18,7 +18,7 @@ export const products: Product[] = [
   {
     id: 1,
     name: "T-Shirt White",
-    price: 119000,
+    price: 500,
     category: "T-Shirts",
     description: "Bahan nyaman untuk aktivitas harian. Potongan modern cocok untuk Gen Z.",
     images: [

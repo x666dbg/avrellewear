@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { products } from "@/data/products";
 import { formatIDR } from "@/lib/currency";
+import { useRouter } from 'next/navigation';
 
 // Tipe untuk data form
 type FormData = {
@@ -20,6 +21,7 @@ type FormData = {
 };
 
 export default function CheckoutPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const productId = searchParams.get('productId');
   const product = products.find(p => p.id === Number(productId));
@@ -63,30 +65,34 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
-      // Panggil API scraper kita
       const response = await fetch('/api/scrape-payment-link', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          product: product,
-          totalPrice: totalPrice,
-          customerDetails: formData,
-        }),
+        body: JSON.stringify({ product, totalPrice, customerDetails: formData }),
       });
 
       const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Gagal membuat payment link.');
-      }
+      if (!data.success) throw new Error(data.error || 'Gagal membuat invoice.');
       
-      const { paymentLink } = data;
+      const expiryTimestamp = new Date().getTime() + (60 * 60 * 1000);
+
+      const params = new URLSearchParams({
+          qr: data.qrCodeUrl,
+          product: data.productName,
+          expiry: String(expiryTimestamp),
+          price: String(data.basePrice),
+          fee: String(data.adminFee),
+          total: String(data.grandTotal),
+          txId: data.transactionId, // <-- TAMBAHKAN INI
+          ref: data.merchantRef,   // <-- TAMBAHKAN INI
+          cust: JSON.stringify(data.customerDetails) // <-- TAMBAHKAN INI
+      });
       
-      // Jika berhasil, arahkan pengguna ke halaman pembayaran
-      window.location.href = paymentLink;
+      router.push(`/invoice/${data.invoiceId}?${params.toString()}`);
 
     } catch (err: any) {
       setError(err.message);
-      setLoading(false); // Hentikan loading jika terjadi error
+      setLoading(false);
     }
   };
 
