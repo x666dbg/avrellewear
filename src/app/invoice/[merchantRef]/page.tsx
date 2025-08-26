@@ -1,11 +1,14 @@
-"use client";
+// src/app/invoice/[merchantRef]/page.tsx
+'use client';
 
-import { useSearchParams, useParams } from 'next/navigation';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useParams, useSearchParams } from 'next/navigation'; // Tambahkan useSearchParams dan useParams
+import Link from 'next/link'; // Tambahkan import Link
+import Image from 'next/image'; // Tambahkan import Image
+import { ArrowLeftIcon } from '@heroicons/react/24/solid';
+import SuccessView from './Success';
 
-// Komponen Countdown Timer (diperbaiki sedikit)
+// Komponen Countdown Timer
 const CountdownTimer = ({ expiryTimestamp, onExpire }: { expiryTimestamp: number, onExpire: () => void }) => {
     const calculateTimeLeft = () => {
         const difference = expiryTimestamp - new Date().getTime();
@@ -38,29 +41,14 @@ const CountdownTimer = ({ expiryTimestamp, onExpire }: { expiryTimestamp: number
     );
 };
 
-// Tampilan "Pembayaran Berhasil"
-const SuccessView = ({ invoiceId }: { invoiceId: string }) => (
-    <div className="text-center space-y-4 py-8">
-        <h2 className="text-2xl font-bold text-green-500">Pembayaran Berhasil!</h2>
-        <p>Pesanan Anda dengan nomor invoice <span className="font-mono bg-slate-100 dark:bg-slate-800 p-1 rounded">{invoiceId}</span> telah lunas.</p>
-        <p>Kami sudah menerima pesanan Anda dan akan segera memprosesnya. Terima kasih telah berbelanja!</p>
-        <Link href="/" className="inline-block mt-6 text-sky-500 hover:underline">
-            ← Kembali ke Beranda
-        </Link>
-    </div>
-);
-
-
 export default function InvoicePage() {
     const searchParams = useSearchParams();
     const params = useParams();
     
-    // PERBAIKAN: Dapatkan invoiceId dan pastikan tipenya string
-    const invoiceId = typeof params.invoiceId === 'string' ? params.invoiceId : '';
+    const invoiceId = typeof params.merchantRef === 'string' ? params.merchantRef : '';
 
-    const [status, setStatus] = useState('pending'); // 'pending', 'success', 'expired'
+    const [status, setStatus] = useState('pending');
     
-    // Ambil semua data dari URL
     const qrCodeUrl = searchParams.get('qr');
     const productName = searchParams.get('product');
     const expiry = searchParams.get('expiry');
@@ -68,22 +56,18 @@ export default function InvoicePage() {
     const adminFee = searchParams.get('fee');
     const grandTotal = searchParams.get('total');
     const transactionId = searchParams.get('txId');
-    const merchantRef = searchParams.get('ref');
     const customerDetails = searchParams.get('cust');
 
     useEffect(() => {
-        if (status !== 'pending' || !transactionId || !merchantRef) return;
+        if (status !== 'pending' || !transactionId || !invoiceId) return;
 
-        // Mulai polling setiap 7 detik
         const interval = setInterval(async () => {
             try {
                 const response = await fetch('/api/check-status', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        transactionId, 
-                        merchantRef,
-                        // Kirim semua data pesanan untuk notifikasi Telegram
+                    body: JSON.stringify({
+                        transactionId,
                         fullOrderData: {
                             invoiceId,
                             grandTotal,
@@ -101,18 +85,16 @@ export default function InvoicePage() {
             }
         }, 7000);
 
-        // Hentikan polling jika user meninggalkan halaman atau status berubah
         return () => clearInterval(interval);
-    }, [status, transactionId, merchantRef, invoiceId, grandTotal, productName, customerDetails]);
+    }, [status, transactionId, invoiceId, grandTotal, productName, customerDetails]);
     
-    // PERBAIKAN: Pindahkan pengecekan invoiceId ke sini agar komponen SuccessView aman
     if (status === 'success') {
         if (!invoiceId) return <div className="text-center py-24">Memuat data keberhasilan...</div>;
         return <SuccessView invoiceId={invoiceId} />;
     }
 
     if (!qrCodeUrl || !grandTotal || !expiry) {
-        return <div className="text-center py-24">... memuat data invoice ...</div>;
+        return <div className="text-center py-24 text-slate-500 dark:text-slate-400">... memuat data invoice ...</div>;
     }
 
     const expiryTimestamp = Number(expiry);
@@ -122,12 +104,12 @@ export default function InvoicePage() {
             <div className="card p-6 md:p-8 text-center space-y-6">
                 {status === 'expired' ? (
                      <div>
-                        <h1 className="text-2xl font-bold tracking-tight text-red-500">Invoice Kedaluwarsa</h1>
-                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Waktu pembayaran untuk invoice ini telah habis. Silakan buat pesanan baru.</p>
-                        <Link href="/" className="inline-block mt-6 text-sky-500 hover:underline">
-                            ← Kembali ke Beranda
-                        </Link>
-                    </div>
+                         <h1 className="text-2xl font-bold tracking-tight text-red-500">Invoice Kedaluwarsa</h1>
+                         <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Waktu pembayaran untuk invoice ini telah habis. Silakan buat pesanan baru.</p>
+                         <Link href="/" className="inline-block mt-6 text-sky-500 hover:underline">
+                             ← Kembali ke Beranda
+                         </Link>
+                     </div>
                 ) : (
                     <>
                         <div>

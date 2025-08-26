@@ -1,3 +1,5 @@
+// src/app/checkout/page.tsx
+
 "use client";
 
 import { useState, useMemo } from "react";
@@ -68,13 +70,16 @@ export default function CheckoutPage() {
       const response = await fetch('/api/scrape-payment-link', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product, totalPrice, customerDetails: formData }),
+        body: JSON.stringify({ product, totalPrice, customerDetails: formData, selectedSize }),
       });
 
       const data = await response.json();
       if (!data.success) throw new Error(data.error || 'Gagal membuat invoice.');
       
-      const expiryTimestamp = new Date().getTime() + (60 * 60 * 1000);
+      const expiryTimestamp = data.expiryTimestamp;
+      
+      // Simpan seluruh data invoice ke sessionStorage sebelum navigasi
+      sessionStorage.setItem('avrelleInvoice', JSON.stringify(data));
 
       const params = new URLSearchParams({
           qr: data.qrCodeUrl,
@@ -83,12 +88,12 @@ export default function CheckoutPage() {
           price: String(data.basePrice),
           fee: String(data.adminFee),
           total: String(data.grandTotal),
-          txId: data.transactionId, // <-- TAMBAHKAN INI
-          ref: data.merchantRef,   // <-- TAMBAHKAN INI
-          cust: JSON.stringify(data.customerDetails) // <-- TAMBAHKAN INI
+          txId: data.transactionId,
+          ref: data.merchantRef,
+          cust: JSON.stringify(data.customerDetails)
       });
       
-      router.push(`/invoice/${data.invoiceId}?${params.toString()}`);
+      router.push(`/invoice/${data.merchantRef}?${params.toString()}`);
 
     } catch (err: any) {
       setError(err.message);

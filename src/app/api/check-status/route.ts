@@ -1,8 +1,4 @@
-// src/app/api/check-status/route.ts
-
 import { NextResponse } from 'next/server';
-import * as cheerio from 'cheerio';
-import { URLSearchParams } from 'url';
 
 async function sendSuccessNotification(data: any) {
     const { invoiceId, grandTotal, productName, customerDetails } = data;
@@ -37,58 +33,44 @@ async function sendSuccessNotification(data: any) {
 
 export async function POST(request: Request) {
     try {
-        const VIOLET_EMAIL = process.env.VIOLET_EMAIL;
-        const VIOLET_PASSWORD = process.env.VIOLET_PASSWORD;
-        if (!VIOLET_EMAIL || !VIOLET_PASSWORD) throw new Error("Kredensial login tidak ada.");
+        const SAKURUPIAH_API_ID = process.env.SAKURUPIAH_API_ID;
+        const SAKURUPIAH_API_KEY = process.env.SAKURUPIAH_API_KEY;
+        const SAKURUPIAH_BASE_URL = "https://sakurupiah.id/api-sanbox";
+
+        if (!SAKURUPIAH_API_ID || !SAKURUPIAH_API_KEY) {
+            throw new Error("Kredensial API Sakurupiah belum diatur.");
+        }
 
         const body = await request.json();
-        // const { transactionId, merchantRef } = body;
-        // if (!transactionId || !merchantRef) throw new Error("ID Transaksi atau Ref Merchant tidak ada.");
-        const transactionId = "D1866725GPO2AD6PSJ7AC1T"; // ID Transaksi yang SUKSES
-        const merchantRef = "4774416551694";
-        // Tahap 1 & 2: Login (wajib dilakukan setiap kali cek)
-        const loginPageResponse = await fetch("https://violetmediapay.com/login");
-        const loginPageHtml = await loginPageResponse.text();
-        const initialCookies = loginPageResponse.headers.get('set-cookie');
-        const $loginPage = cheerio.load(loginPageHtml);
-        const csrfTokenLogin = $loginPage('input[name="csrf_token"]').val();
-        if (!initialCookies || !csrfTokenLogin) throw new Error("Gagal mendapatkan data login awal.");
+        const { transactionId, fullOrderData } = body;
+        if (!transactionId) {
+            throw new Error("ID Transaksi tidak ada.");
+        }
 
-        const loginResponse = await fetch("https://violetmediapay.com/login", {
+        const formData = new URLSearchParams();
+        formData.append('api_id', SAKURUPIAH_API_ID);
+        formData.append('method', 'status');
+        formData.append('trx_id', transactionId);
+
+        const response = await fetch(`${SAKURUPIAH_BASE_URL}/status-transaction.php`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Cookie': initialCookies },
-            body: new URLSearchParams({ csrf_token: csrfTokenLogin, username: VIOLET_EMAIL, password: VIOLET_PASSWORD, login: '' }),
-            redirect: 'manual'
+            headers: {
+                'Authorization': `Bearer ${SAKURUPIAH_API_KEY}`,
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formData.toString()
         });
-        const finalCookies = loginResponse.headers.get('set-cookie') || initialCookies;
-        if (loginResponse.status !== 302 || loginResponse.headers.get('location')?.includes('/login')) {
-            throw new Error("Login gagal saat cek status.");
+
+        const data = await response.json();
+        console.log("Sakurupiah status response:", data);
+        
+        // Perbaikan: Cek `data.data[0].status` yang bernilai 'berhasil'
+        if (data.data?.[0]?.status === 'berhasil') {
+            await sendSuccessNotification(fullOrderData);
+            return NextResponse.json({ status: 'success' });
         }
         
-        // Tahap 3: Kunjungi halaman riwayat transaksi
-        const historyPageResponse = await fetch("https://violetmediapay.com/transaksi/semua-transaksi", {
-            headers: { 'Cookie': finalCookies }
-        });
-        const historyPageHtml = await historyPageResponse.text();
-        const $ = cheerio.load(historyPageHtml);
-
-        let status = 'pending';
-
-        // Cari baris tabel yang mengandung ID Transaksi dan Ref Merchant yang kita cari
-        const targetRow = $(`td:contains("${transactionId}")`).filter((i, el) => {
-            return $(el).parent().text().includes(merchantRef);
-        }).parent(); // .parent() untuk mendapatkan elemen <tr>
-
-        if (targetRow.length > 0) {
-            // Jika baris ditemukan, cek apakah ada badge success di dalamnya
-            if (targetRow.find('span.bg-success').length > 0) {
-                status = 'success';
-                // Kirim notifikasi LUNAS ke Telegram
-                await sendSuccessNotification(body.fullOrderData);
-            }
-        }
-        
-        return NextResponse.json({ status });
+        return NextResponse.json({ status: 'pending' });
 
     } catch (error: any) {
         console.error("Error saat cek status:", error.message);
