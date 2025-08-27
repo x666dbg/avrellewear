@@ -63,6 +63,11 @@ export default function InvoicePage() {
 
         const interval = setInterval(async () => {
             try {
+                const savedRaw = typeof window !== 'undefined'
+                    ? sessionStorage.getItem('avrelleInvoice')
+                    : null;
+                const saved = savedRaw ? JSON.parse(savedRaw) : {};
+
                 const response = await fetch('/api/check-status', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -72,22 +77,27 @@ export default function InvoicePage() {
                             invoiceId,
                             grandTotal,
                             productName,
-                            customerDetails: JSON.parse(customerDetails || '{}')
-                        }
+                            customerDetails: JSON.parse(customerDetails || '{}'),
+                            selectedSize: saved?.selectedSize ?? null,
+                            quantity: typeof saved?.quantity === 'number'
+                            ? saved.quantity
+                            : undefined,
+                        },
                     }),
                 });
+
                 const data = await response.json();
                 if (data.status === 'success') {
                     setStatus('success');
                 }
-            } catch (error) {
+                } catch (error) {
                 console.error("Polling error:", error);
-            }
-        }, 7000);
+                }
+            }, 7000);
 
         return () => clearInterval(interval);
     }, [status, transactionId, invoiceId, grandTotal, productName, customerDetails]);
-    
+
     if (status === 'success') {
         if (!invoiceId) return <div className="text-center py-24">Memuat data keberhasilan...</div>;
         return <SuccessView invoiceId={invoiceId} />;
